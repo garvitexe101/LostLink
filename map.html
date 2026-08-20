@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Campus Map · LostLink</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="map">
+  <header class="topbar">
+    <a class="brand" href="index.html">
+      <span class="brand-mark">C</span>
+      <span>campus<span>found</span></span>
+    </a>
+
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="browse.html">Browse</a>
+      <a class="current" href="map.html">Campus map</a>
+      <a href="how-it-works.html">How it works</a>
+    </nav>
+
+    <a class="profile-btn profile-nav" href="profile.html">
+      <span class="profile-dot" id="profileInitial">◉</span>
+      <span id="profileLabel">Profile</span>
+    </a>
+  </header>
+
+  <main class="map-page">
+    <div class="map-intro">
+      <p class="eyebrow">
+        <span></span>
+        CHITKARA UNIVERSITY · RAJPURA CAMPUS
+      </p>
+
+      <h1>
+        Find it where<br>
+        it happened.
+      </h1>
+
+      <p>
+        Select a familiar campus zone to focus the reports below. Every active
+        report is shown by default.
+      </p>
+    </div>
+
+    <section class="campus-map illustrated-map">
+      <div class="map-key">
+        <span><i class="green-dot"></i>Found reports</span>
+        <span><i class="red-dot"></i>Lost reports</span>
+      </div>
+
+      <div class="route route-a"></div>
+      <div class="route route-b"></div>
+      <div class="route route-c"></div>
+
+      <button class="zone-card z-library" data-zone="Central Library">
+        <b>▥</b>
+        <strong>Central Library</strong>
+        <small>View reports</small>
+        <i class="map-count">3</i>
+      </button>
+
+      <button class="zone-card z-academic" data-zone="Academic Block">
+        <b>▦</b>
+        <strong>Academic Block</strong>
+        <small>View reports</small>
+        <i class="map-count lost-count">2</i>
+      </button>
+
+      <button class="zone-card z-student" data-zone="Student Centre">
+        <b>◈</b>
+        <strong>Student Centre</strong>
+        <small>View reports</small>
+        <i class="map-count">1</i>
+      </button>
+
+      <button class="zone-card z-sports" data-zone="Sports Complex">
+        <b>◯</b>
+        <strong>Sports Complex</strong>
+        <small>View reports</small>
+        <i class="map-count">1</i>
+      </button>
+
+      <button class="zone-card z-cafe" data-zone="Cafeteria">
+        <b>♨</b>
+        <strong>Cafeteria</strong>
+        <small>View reports</small>
+      </button>
+
+      <button class="zone-card z-hostel" data-zone="Hostels">
+        <b>⌂</b>
+        <strong>Hostels</strong>
+        <small>View reports</small>
+      </button>
+
+      <div class="map-label north">NORTH GATE</div>
+      <div class="map-label south">CHITKARA RAJPURA CAMPUS</div>
+    </section>
+
+    <section class="zone-results horizontal-results">
+      <div>
+        <p class="eyebrow">
+          <span></span>
+          LOCATION ACTIVITY
+        </p>
+
+        <h2 id="zoneTitle">All active campus reports</h2>
+      </div>
+
+      <button id="showAllZones" class="show-all-zones">
+        Show all
+      </button>
+    </section>
+
+    <div id="zoneItems" class="map-item-list horizontal-item-list"></div>
+
+    <p class="map-note">
+      Choose any report to open its details and secure validation form. Campus
+      zones protect personal location privacy.
+    </p>
+  </main>
+
+  <footer>
+    <span>© 2026 LostLink · Chitkara University</span>
+    <span>Rajpura campus · zone map</span>
+  </footer>
+
+  <div id="appModal"></div>
+  <div id="toast"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
