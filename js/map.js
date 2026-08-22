@@ -1,4 +1,4 @@
-/* Campus-zone selection and map report rendering. */
+
 function renderMap() {
   if(document.body.dataset.page!=='map')return;
   function show(z) {
