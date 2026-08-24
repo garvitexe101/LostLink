@@ -126,3 +126,107 @@ function openLogin(role='student') {
     setTimeout(()=>location.href=admin?'admin.html':'profile.html',250)
   }
 }
+function fixLoginButtons() {
+  const top=$('#authButton');
+  if(top)top.onclick=()=>openLogin(document.body.dataset.page==='admin'?'admin':'student');
+  const admin=$('#adminLogin');
+  if(admin)admin.onclick=()=>openLogin('admin');
+  const quick=$('#quickSignIn');
+  if(quick)quick.onclick=()=>openLogin('student')
+}
+setTimeout(fixLoginButtons,0);
+function notices() {
+  return JSON.parse(localStorage.getItem('campusfound-notices')||'[]')
+}
+function notify(email,message) {
+  const all=notices();
+  all.unshift( {
+    email,message,time:new Date().toISOString()
+  });
+  localStorage.setItem('campusfound-notices',JSON.stringify(all))
+}
+function applyLostLinkBrand() {
+  document.title=document.title.replace(/CampusFound/gi,'LostLink');
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/svg+xml';
+  icon.href='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="18" fill="#17213a"/><path d="M19 20v25h21" fill="none" stroke="#fd805e" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="43" cy="43" r="7" fill="#f9ca68"/></svg>');
+  document.head.append(icon);
+  $$('.brand').forEach(b=> {
+    const mark=b.querySelector('.brand-mark'),name=b.querySelector('span:last-child');
+    if(mark)mark.textContent='L';
+    if(name)name.innerHTML='Lost<span>Link</span>'
+  });
+  const skip=new Set(['SCRIPT','STYLE']);
+  const walk=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  let n;
+  while(n=walk.nextNode()) {
+    if(!skip.has(n.parentElement?.tagName))n.nodeValue=n.nodeValue.replace(/CampusFound/g,'LostLink').replace(/campusfound/g,'lostlink')
+  }
+  if(document.body.dataset.page==='home') {
+    const h=$('.hero h1');
+    if(h)h.innerHTML='Lost something?<br><em>Find your link.</em>';
+    const p=$('.hero-text');
+    if(p)p.textContent='LostLink connects students, finders and campus security—so every belonging has a better way back.'
+  }
+}
+setTimeout(applyLostLinkBrand,0);
+function polishLostLink() {
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/svg+xml';
+  icon.href='lostlink-logo.svg';
+  document.head.append(icon);
+  $$('.brand-mark').forEach(m=> {
+    m.innerHTML='⌁';
+    m.setAttribute('aria-label','LostLink logo')
+  });
+  if(document.body.dataset.page==='home') {
+    const h=$('.hero h1'),p=$('.hero-text');
+    if(h)h.innerHTML='Lost something?<br><em>Every lost thing deserves a way back.</em>';
+    if(p)p.textContent='LostLink brings students, finders and campus security together—making each return feel simple, safe and human.'
+  }
+}
+setTimeout(polishLostLink,10);
+function refreshLostLinkIdentity() {
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/svg+xml';
+  icon.href='lostlink-logo-v2.svg';
+  document.head.append(icon);
+  $$('.brand-mark').forEach(m=> {
+    m.innerHTML='⌖';
+    m.setAttribute('aria-label','LostLink location logo')
+  });
+  if(document.body.dataset.page==='home') {
+    const h=$('.hero h1'),p=$('.hero-text');
+    if(h)h.innerHTML='Lost something?<br><em>Lost, found, back to you.</em>';
+    if(p)p.textContent='LostLink makes it easy for the Chitkara community to report, match and safely return the things that matter.'
+  }
+}
+setTimeout(refreshLostLinkIdentity,20);
+function newBeaconLogo() {
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/svg+xml';
+  icon.href='lostlink-logo-v3.svg';
+  document.head.append(icon);
+  $$('.brand-mark').forEach(m=> {
+    m.innerHTML='<i class="beacon-logo"><i></i></i>';
+    m.setAttribute('aria-label','LostLink return beacon logo')
+  })
+}
+setTimeout(newBeaconLogo,30);
+function pathPeopleLogo() {
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/svg+xml';
+  icon.href='lostlink-logo-v4.svg';
+  document.head.append(icon);
+  $$('.brand-mark').forEach(m=> {
+    m.innerHTML='<i class="path-logo"><i class="person start"></i><i class="route"></i><i class="item-dot">◆</i><i class="person end"></i></i>';
+    m.setAttribute('aria-label','LostLink people and item path logo')
+  })
+}
+setTimeout(pathPeopleLogo,40);
+
