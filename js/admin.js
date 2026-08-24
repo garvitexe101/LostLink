@@ -30,3 +30,53 @@ function renderAdmin() {
   </small></div><button class="visibility" data-hide="${i.id}">$ {
     i.visible===false?'Make visible':'Hide report'
   }
+  /* Admin dashboard, claim moderation, visibility, and item removal. */
+
+  </button></div>`).join('')}</section></div>`;
+  $$('[data-approve]').forEach(b=>b.onclick=()=> {
+    let i=items.find(x=>x.id==b.dataset.approve);
+    i.claim='approved';
+    i.status='Returned';
+    save();
+    toast('Claim approved and item marked returned.');
+    renderAdmin()
+  });
+  $$('[data-reject]').forEach(b=>b.onclick=()=> {
+    let i=items.find(x=>x.id==b.dataset.reject);
+    i.claim='rejected';
+    i.status='Open';
+    save();
+    toast('Claim rejected.');
+    renderAdmin()
+  });
+  $$('[data-hide]').forEach(b=>b.onclick=()=> {
+    let i=items.find(x=>x.id==b.dataset.hide);
+    i.visible=!i.visible;
+    save();
+    renderAdmin()
+  })
+}
+renderAdmin();
+function adminItemActions() {
+  if(document.body.dataset.page!=='admin'||!user()||user().role!=='admin')return;
+  $$('.moderation-row').forEach(row=> {
+    const b=row.querySelector('[data-hide]');
+    if(!b)return;
+    const id=b.dataset.hide;
+    row.style.cursor='pointer';
+    row.onclick=e=> {
+      if(e.target!==b)location.href=`item.html?id=${id}`
+    };
+    b.textContent='Remove item';
+    b.onclick=e=> {
+      e.stopPropagation();
+      if(!confirm('Remove this item report from the prototype?'))return;
+      items=items.filter(i=>i.id!=id);
+      save();
+      toast('Item removed.');
+      location.reload()
+    }
+  })
+}
+setTimeout(adminItemActions,0);
+
