@@ -23,3 +23,17 @@
   color:#17213a;
   font-family:"DM Sans",sans-serif
 }
+.time-combo {
+  display:flex;
+  gap:8px;
+  width:100%
+}
+.time-combo input {
+  min-width:0;
+  flex:1
+}
+.time-combo select {
+  width:82px!important;
+  flex:0 0 82px;
+  padding-left:11px!important
+}
