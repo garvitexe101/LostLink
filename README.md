@@ -33,17 +33,11 @@ No npm install, database, or server setup is required for this Phase 1 version.
 6. Go to the admin dashboard and sign in using the demo credentials below.
 7. Open a listed item, check the student answers, then accept or reject the claim.
 
-<details>
-<summary><strong>Administrator demo credentials</strong></summary>
+  
+## Live Demo
+link - https://lostlink-topaz.vercel.app/index.html
 
-| Field | Value |
-| --- | --- |
-| Email | `admin@chitkara.edu` |
-| Password | `admin123` |
 
-These credentials are only for evaluating the prototype. They are not secure authentication and must be replaced by real server-side authentication before deployment.
-
-</details>
 
 ## Key Phase 1 features
 
