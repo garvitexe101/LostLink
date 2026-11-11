@@ -1,0 +1,30 @@
+{
+  "name": "lostlink",
+  "version": "2.0.0",
+  "description": "LostLink - campus lost and found (Express + MongoDB)",
+  "main": "backend/server.js",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "db:view": "node backend/scripts/viewDb.js",
+    "db:shell": "node backend/scripts/shellDb.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^14.5.0",
+    "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.9.4",
+    "mongoose": "^9.11.4",
+    "nodemailer": "^10.2.1"
+  },
+  "devDependencies": {
+    "mongodb-memory-server": "^11.3.0"
+  }
+}
