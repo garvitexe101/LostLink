@@ -1,0 +1,95 @@
+const path = require('path');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+
+const config = require('./config/config');
+const { mongoose, connectDB, disconnectDB } = require('./config/db');
+const { loadUser } = require('./middleware');
+const { ensureAdmin, seedDemoData } = require('./seed');
+
+const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
+
+// Security & Cross-Origin (CORS) headers for deployed frontend integration (Requirement 3 & 5)
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin) {
+    res.set('Access-Control-Allow-Origin', origin);
+    res.set('Access-Control-Allow-Credentials', 'true');
+  } else {
+    res.set('Access-Control-Allow-Origin', '*');
+  }
+  res.set({
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'SAMEORIGIN',
+    'Referrer-Policy': 'strict-origin-when-cross-origin',
+  });
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
+app.use(express.json({ limit: '4mb' }));
+app.use(cookieParser());
+app.use('/api', loadUser);
+
+// API Routes (Requirement 1 & 2)
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/items', require('./routes/items'));
+const { claimsRouter, adminRouter } = require('./routes/claims');
+app.use('/api/admin', adminRouter);
+app.use('/api', claimsRouter);
+app.use('/api', require('./routes/misc'));
+
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.', code: 'not_found' }));
+
+// Serve Frontend Static Files (Requirement 7: frontend folder)
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
+app.use(express.static(path.join(__dirname, '..', 'public'))); // fallback alias
+
+// Global Error Handler
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  const status = err.status || err.statusCode || 500;
+  if (status >= 500) {
+    console.error(err);
+    return res.status(500).json({ error: 'Something went wrong on the server.', code: 'server_error' });
+  }
+  res.status(status).json({
+    error: err.type === 'entity.parse.failed' ? 'Invalid request body.' : err.message,
+    code: err.code || 'bad_request',
+  });
+});
+
+async function startServer() {
+  await connectDB();
+  if (mongoose.connection.readyState === 1) {
+    await ensureAdmin();
+    await seedDemoData();
+  }
+
+  const server = app.listen(config.port, () => {
+    console.log(`\n======================================================`);
+    console.log(`LostLink live and running at http://localhost:${config.port}`);
+    console.log(`======================================================`);
+    if (config.jwtSecretIsRandom) console.log('Note: JWT_SECRET not set - sessions reset on every restart.');
+    if (!config.smtp.host) console.log('Note: SMTP not configured - emails are printed to this console.');
+  });
+
+  function shutdown() {
+    server.close(async () => {
+      await disconnectDB();
+      process.exit(0);
+    });
+  }
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
+}
+
+startServer().catch((err) => {
+  console.error('Failed to start server:', err);
+});
+
+module.exports = app;
